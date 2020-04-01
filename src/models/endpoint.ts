@@ -19,34 +19,9 @@ interface Error {
   messages: string
 }
 
-export class Endpoint extends Base {
-  static readonly tableName = "endpoints"
-
-  static where(conditions: IEndpoint): Promise<Array<Endpoint>> {
-    return new Promise(resolve => {
-      let sql = "SELECT * FROM ??"
-      let tokens = []
-      let values = [this.tableName]
-
-      for (const [attribute, value] of Object.entries(conditions)) {
-        tokens.push("?? = ?")
-        values.push(attribute, value)
-      }
-
-      if (tokens.length) {
-        sql = `${sql} WHERE ${tokens.join(" AND ")}`
-      }
-
-      connection.query(sql, values, (error, results) => {
-        if (error) { throw error }
-
-        const items = []
-        for (const row of results) {
-          items.push(new this(row))
-        }
-        resolve(items)
-      })
-    })
+export class Endpoint extends Base<IEndpoint, Endpoint>() {
+  static get tableName() {
+    return "endpoints"
   }
 
   constructor(public attrs: IEndpoint) {

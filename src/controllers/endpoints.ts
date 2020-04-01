@@ -12,6 +12,7 @@ export class Endpoints extends Base {
 
   start() {
     this.server.get("/endpoints", this.auth, this.index.bind(this))
+    this.server.get("/endpoints/:id", this.auth, this.show.bind(this))
     this.server.post("/endpoints", this.auth, this.create.bind(this))
     this.server.patch("/endpoints/:id", this.auth, this.update.bind(this))
     this.server.del("/endpoints/:id", this.auth, this.delete.bind(this))
@@ -24,6 +25,23 @@ export class Endpoints extends Base {
       .where({ userId: user.attrs.id })
       .then(endpoints => {
         res.send(endpoints.map(endpoint => endpoint.toApi()))
+        next()
+      })
+  }
+
+  show(req: Request, res: Response, next: Next) {
+    const user: User = req.get("user")
+
+    Endpoint
+      .where({ userId: user.attrs.id, id: req.params.id })
+      .then(endpoints => {
+        if (endpoints.length) {
+          res.json(endpoints[0].toApi())
+        }
+        else {
+          res.send(404)
+        }
+
         next()
       })
   }
@@ -46,12 +64,13 @@ export class Endpoints extends Base {
       .then(endpoints => {
         const endpoint = endpoints[0]
 
-        if (!endpoint) {
-          res.send([])
-          return next()
+        if (endpoint) {
+          this.updateAndSave(endpoint, req, res, next)
         }
-
-        this.updateAndSave(endpoint, req, res, next)
+        else {
+          res.send(404)
+          next()
+        }
       })
   }
 
@@ -80,7 +99,7 @@ export class Endpoints extends Base {
 
     endpoint.save()
       .then(endpoint => {
-        res.send(codeIfSuccess, endpoint.toApi())
+        res.json(codeIfSuccess, endpoint.toApi())
         next()
       })
       .catch(errors => {
