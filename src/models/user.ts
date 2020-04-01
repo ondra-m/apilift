@@ -11,8 +11,10 @@ interface IUser {
   accessToken?: string
 }
 
-export class User extends Base {
-  readonly tableName = "users"
+export class User extends Base<IUser, User>() {
+  static get tableName() {
+    return "users"
+  }
 
   static create(attrs: IUser = {}) {
     return new this(attrs).create()
@@ -49,7 +51,7 @@ export class User extends Base {
 
   create() {
     return new Promise(resolve => {
-      connection.query("INSERT INTO ?? (name, email, accessToken) VALUES(?, ?, ?)", [this.tableName, this.attrs.name, this.attrs.email, this.attrs.accessToken], (error, results, fields) => {
+      connection.query("INSERT INTO ?? (name, email, accessToken) VALUES(?, ?, ?)", [User.tableName, this.attrs.name, this.attrs.email, this.attrs.accessToken], (error, results, fields) => {
         if (error) { throw error }
 
         resolve(results)
@@ -57,5 +59,13 @@ export class User extends Base {
     })
   }
 
+  toApi() {
+    return {
+      id: this.attrs.id,
+      name: this.attrs.name,
+      email: this.attrs.email,
+      accessToken: this.attrs.accessToken,
+    }
+  }
 
 }

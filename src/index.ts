@@ -12,8 +12,7 @@ import { start as serverStart } from "./server";
 
 (async () => {
   await dbStart()
-
-  serverStart()
+  await serverStart()
 })()
 
 // function sleep(ms: number) {
