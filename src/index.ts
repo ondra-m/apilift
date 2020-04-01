@@ -1,5 +1,6 @@
 import { start as dbStart } from "./database"
-import { start as serverStart } from "./server";
+import { start as serverStart } from "./server"
+import { start as jobsStart } from "./jobs"
 
 // import { User } from "./models/user";
 
@@ -12,6 +13,7 @@ import { start as serverStart } from "./server";
 
 (async () => {
   await dbStart()
+  await jobsStart()
   await serverStart()
 })()
 
