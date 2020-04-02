@@ -4,7 +4,7 @@ CREATE TABLE monitoringResults (
     userId     INT      NOT NULL,
     checkedAt  DATETIME NOT NULL,
     httpCode   INT      NOT NULL,
-    payload    TEXT     NOT NULL,
+    payload    LONGTEXT NOT NULL,
     PRIMARY KEY (id),
     INDEX index_endpoint_dd (endpointId)
 ) DEFAULT CHARSET=utf8

@@ -8,7 +8,7 @@ import { it } from "mocha"
 
 const expect = chai.expect
 
-describe("Endpoints", () => {
+describe("Monitoring results", () => {
   let endpoint: Endpoint
   let monitoringResult: MonitoringResult
   let user: User | null
