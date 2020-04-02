@@ -5,9 +5,8 @@
   "main": "build/index.js",
   "scripts": {
     "start:dev": "nodemon",
-    "build": "tsc && npm run copy-sqls",
-    "start": "npm run build && node build/index.js",
-    "copy-sqls": "cp -r src/migrate/*.sql build/migrate",
+    "start": "npm run copy-sqls && ts-node ./src/index.ts",
+    "copy-sqls": "cp -r src/migrate/*.sql build/migrate/",
     "test-dev": "nodemon --watch . --ext ts --exec 'mocha --file test/bootstrap.ts -r ts-node/register test/**/*.test.ts'"
   },
   "author": "",

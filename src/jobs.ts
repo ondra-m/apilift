@@ -3,7 +3,7 @@ import { Endpoint } from "./models/endpoint"
 import { MonitoringResult } from "./models/monitoringResult"
 
 class Worker {
-  constructor(public runsEvery: number = 5) {}
+  constructor(public waitBetweenRuns: number = 5) {}
 
   request(url: string): Promise<{ payload: string, httpCode: number }> {
     return new Promise(resolve => {
@@ -22,6 +22,11 @@ class Worker {
     })
   }
 
+  addSeconds(date: Date, days: number) {
+    date.setSeconds(date.getSeconds() + days)
+    return date
+  }
+
   async run() {
     try {
       const endpoints = await Endpoint.nextRuns()
@@ -35,13 +40,17 @@ class Worker {
             endpointId: endpoint.id,
             checkedAt: new Date(),
           })
+
+          endpoint.attrs.lastCheckedAt = new Date()
+          endpoint.attrs.nextRunAt = this.addSeconds(endpoint.attrs.nextRunAt || new Date(), endpoint.attrs.interval || 10)
+          await endpoint.save()
         }
       }
     } catch (error) {
       console.error(error)
     }
 
-    setTimeout(this.run.bind(this), this.runsEvery * 1000)
+    setTimeout(this.run.bind(this), this.waitBetweenRuns * 1000)
   }
 }
 

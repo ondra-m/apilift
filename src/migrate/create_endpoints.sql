@@ -5,6 +5,7 @@ CREATE TABLE endpoints (
     `interval`      INT          NOT NULL,
     userId          INT          NOT NULL,
     lastCheckedAt   DATETIME     NULL,
+    nextRunAt       DATETIME     NULL,
     createdAt       DATETIME     NOT NULL,
     PRIMARY KEY (id),
     INDEX index_user_id (userId)

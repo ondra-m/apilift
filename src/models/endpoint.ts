@@ -10,6 +10,7 @@ interface IEndpoint {
   url?: string
   interval?: number
   userId?: number
+  nextRunAt?: Date
   lastCheckedAt?: Date
   createdAt?: Date
 }
@@ -24,6 +25,20 @@ export class Endpoint extends Base<IEndpoint, Endpoint>() {
     return "endpoints"
   }
 
+  static nextRuns(): Promise<Array<Endpoint>> {
+    return new Promise(resolve => {
+      connection.query("SELECT * FROM ?? WHERE nextRunAt IS NULL OR nextRunAt <= ?", [this.tableName, new Date()], (error, results) => {
+        if (error) { throw error }
+
+        const endpoints = []
+        for (const attr of results) {
+          endpoints.push(new this(attr))
+        }
+        resolve(endpoints)
+      })
+    })
+  }
+
   constructor(public attrs: IEndpoint) {
     super()
   }
@@ -35,8 +50,8 @@ export class Endpoint extends Base<IEndpoint, Endpoint>() {
       errors.push({ attribute: "name", messages: "Name is required" })
     }
 
-    if (!this.attrs.url || !validator.isURL(this.attrs.url)) {
-      errors.push({ attribute: "url", messages: "URL is required" })
+    if (!this.attrs.url || !validator.isURL(this.attrs.url, { require_protocol: true })) {
+      errors.push({ attribute: "url", messages: "URL is not valid" })
     }
 
     if (!this.attrs.interval || !validator.isInt(this.attrs.interval.toString(), { min: 1 })) {
@@ -58,8 +73,8 @@ export class Endpoint extends Base<IEndpoint, Endpoint>() {
       let values
 
       if (this.attrs.id) {
-        sql = "UPDATE ?? SET name=?, url=?, `interval`=?, lastCheckedAt=? WHERE id=?"
-        values = [Endpoint.tableName, this.attrs.name, this.attrs.url, this.attrs.interval, this.attrs.lastCheckedAt, this.attrs.id]
+        sql = "UPDATE ?? SET name=?, url=?, `interval`=?, lastCheckedAt=?, nextRunAt=? WHERE id=?"
+        values = [Endpoint.tableName, this.attrs.name, this.attrs.url, this.attrs.interval, this.attrs.lastCheckedAt, this.attrs.nextRunAt, this.attrs.id]
       }
       else {
         sql = "INSERT INTO ?? (name, url, `interval`, userId, createdAt) VALUES (?, ?, ?, ?, ?)"
@@ -74,15 +89,6 @@ export class Endpoint extends Base<IEndpoint, Endpoint>() {
           if (results.insertId) { this.attrs.id = results.insertId }
           resolve(this)
         }
-      })
-    })
-  }
-
-  delete(): Promise<Endpoint> {
-    return new Promise(resolve => {
-      connection.query("DELETE FROM ?? WHERE id = ?", [Endpoint.tableName, this.id], (error, results) => {
-        this.isDeleted = true
-        resolve(this)
       })
     })
   }

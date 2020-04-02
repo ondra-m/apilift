@@ -1,15 +1,15 @@
-import mysql from "mysql"
 import path from "path"
 import { readFileSync } from "fs"
-import * as seed from "./migrate/seed";
-import { queryCallback } from "mysql";
-import { resolve } from "dns";
+import mysql from "mysql"
+import { queryCallback } from "mysql"
+import * as seed from "./migrate/seed"
 
 export const connection = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "root",
   database: "apilift",
+  debug: ['ComQueryPacket'],
 })
 
 
@@ -52,26 +52,9 @@ async function seedIfNoRecords(tableName: string, seedFunc: Function) {
   })
 }
 
-
-
 export async function start() {
   await createTableIfNotExists("users")
   await createTableIfNotExists("endpoints")
+  await createTableIfNotExists("monitoringResults")
   await seedIfNoRecords("users", seed.createUsers)
 }
-
-
-
-//
-
-// function createTableIfNotExists(tableName: string) {
-//   const sqlFile = path.join(__dirname, "sqls", `create_${tableName}`)
-
-//   const a = query("SHOW TABLES LIKE '%tablename%'")
-
-//     console.log(2)
-// }
-
-// createTableIfNotExists("users")
-
-//     console.log(3)
