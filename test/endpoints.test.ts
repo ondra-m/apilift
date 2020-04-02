@@ -17,7 +17,7 @@ describe("Endpoints", () => {
 
       const endpoint = new Endpoint({
         name: "Test",
-        url: "applifting.cz",
+        url: "http://applifting.cz",
         interval: 10,
         userId: user?.id,
       })
@@ -42,7 +42,7 @@ describe("Endpoints", () => {
 
         expect(record.userId).to.eq(user?.attrs?.id)
         expect(record.name).to.eq("Test")
-        expect(record.url).to.eq("applifting.cz")
+        expect(record.url).to.eq("http://applifting.cz")
 
         done()
       })
@@ -81,7 +81,7 @@ describe("Endpoints", () => {
       .send({
         "interval": 10,
         "name": "testtesttest",
-        "url": "seznam.cz",
+        "url": "http://seznam.cz",
       })
       .expect(201)
       .end((err: any, response: supertest.Response) => {
