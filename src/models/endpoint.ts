@@ -1,8 +1,6 @@
-import validator from "validator";
-import { connection } from "../database";
-import { User } from "./user";
-import { resolve } from "dns";
-import { Base } from "./base";
+import validator from "validator"
+import { connection } from "../database"
+import { Base } from "./base"
 
 interface IEndpoint {
   id?: number

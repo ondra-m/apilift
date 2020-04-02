@@ -1,9 +1,9 @@
 import restify from "restify"
 import { Request, Response, Next } from "restify"
-import { Base } from "./base"
+import { BaseController } from "./base_controller"
 import { User } from "../models/user"
 
-export class Users extends Base {
+export class UsersController extends BaseController {
   constructor(server: restify.Server) {
     super(server)
   }

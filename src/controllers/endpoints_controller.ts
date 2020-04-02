@@ -1,11 +1,11 @@
-import restify from "restify";
-import restifyErrors from "restify-errors";
-import { Request, Response, Next } from "restify";
-import { Base } from "./base";
-import { User } from "../models/user";
-import { Endpoint } from "../models/endpoint";
+import restify from "restify"
+import restifyErrors from "restify-errors"
+import { Request, Response, Next } from "restify"
+import { BaseController } from "./base_controller"
+import { User } from "../models/user"
+import { Endpoint } from "../models/endpoint"
 
-export class Endpoints extends Base {
+export class EndpointsController extends BaseController {
   constructor(server: restify.Server) {
     super(server)
   }

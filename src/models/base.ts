@@ -1,6 +1,5 @@
-import { connection } from "../database";
-import { NotImplementedError } from "restify-errors";
-import { resolve } from "dns";
+import { connection } from "../database"
+import { NotImplementedError } from "restify-errors"
 
 // hm, it works
 export function Base<T, A>() {
@@ -35,7 +34,7 @@ export function Base<T, A>() {
       })
     }
 
-    static where(conditions: T): Promise<Array<A>> {
+    static where(conditions: T, order?: Array<[string, string]>, limit?: number): Promise<Array<A>> {
       return new Promise(resolve => {
         let sql = "SELECT * FROM ??"
         let tokens = []
@@ -48,6 +47,17 @@ export function Base<T, A>() {
 
         if (tokens.length) {
           sql = `${sql} WHERE ${tokens.join(" AND ")}`
+        }
+
+        if (order) {
+          sql += " ORDER BY"
+          for (const item of order) {
+            sql += ` ${item[0]} ${item[1]}`
+          }
+        }
+
+        if (limit && limit > 0) {
+          sql += ` LIMIT ${limit}`
         }
 
         connection.query(sql, values, (error, results) => {

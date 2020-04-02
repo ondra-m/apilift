@@ -38,6 +38,7 @@ class Worker {
             payload,
             httpCode,
             endpointId: endpoint.id,
+            userId: endpoint.attrs.userId,
             checkedAt: new Date(),
           })
 
