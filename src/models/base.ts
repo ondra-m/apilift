@@ -70,12 +70,23 @@ export function Base<T, A>() {
       })
     }
 
-    constructor() {
-
-    }
+    constructor() {}
 
     public get id(): number {
       return this.attrs.id
+    }
+
+    public get tableName(): string {
+      return Object.getPrototypeOf(this).constructor.tableName
+    }
+
+    delete(): Promise<A> {
+      return new Promise(resolve => {
+        connection.query("DELETE FROM ?? WHERE id = ?", [this.tableName, this.id], (error, results) => {
+          this.isDeleted = true
+          resolve(<any>this)
+        })
+      })
     }
 
   }

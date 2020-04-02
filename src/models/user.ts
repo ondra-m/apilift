@@ -1,8 +1,6 @@
 import { connection, callback } from "../database"
-import { v1 as generateUUID } from "uuid";
-import { resolve } from "dns";
-import { Base } from "./base";
-
+import { v1 as generateUUID } from "uuid"
+import { Base } from "./base"
 
 interface IUser {
   id?: number
@@ -16,7 +14,7 @@ export class User extends Base<IUser, User>() {
     return "users"
   }
 
-  static create(attrs: IUser = {}) {
+  static create(attrs: IUser) {
     return new this(attrs).create()
   }
 
