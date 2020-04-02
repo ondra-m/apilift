@@ -1,7 +1,7 @@
 import restify from "restify"
 import { EndpointsController } from "./controllers/endpoints_controller"
 import { UsersController } from "./controllers/users_controller"
-import { MonitoringResultsController } from "./controllers/monitoringResults_controller"
+import { MonitoringResultsController } from "./controllers/monitoring_results_controller"
 
 export let server: restify.Server
 

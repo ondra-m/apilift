@@ -1,6 +1,6 @@
 import https from "https"
 import { Endpoint } from "./models/endpoint"
-import { MonitoringResult } from "./models/monitoringResult"
+import { MonitoringResult } from "./models/monitoring_result"
 
 class Worker {
   constructor(public waitBetweenRuns: number = 5) {}

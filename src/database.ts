@@ -1,7 +1,6 @@
 import path from "path"
 import { readFileSync } from "fs"
 import mysql from "mysql"
-import { queryCallback } from "mysql"
 import * as seed from "./migrate/seed"
 
 export const connection = mysql.createPool({
@@ -9,13 +8,7 @@ export const connection = mysql.createPool({
   user: "root",
   password: "root",
   database: "apilift",
-  debug: ['ComQueryPacket'],
 })
-
-
-export declare type callback = queryCallback
-
-
 
 async function createTableIfNotExists(tableName: string): Promise<boolean> {
   return new Promise(resolve => {

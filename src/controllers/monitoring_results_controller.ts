@@ -4,7 +4,7 @@ import { Request, Response, Next } from "restify"
 import { BaseController } from "./base_controller"
 import { User } from "../models/user"
 import { Endpoint } from "../models/endpoint"
-import { MonitoringResult } from "../models/monitoringResult"
+import { MonitoringResult } from "../models/monitoring_result"
 
 export class MonitoringResultsController extends BaseController {
 

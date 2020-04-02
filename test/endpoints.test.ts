@@ -13,6 +13,8 @@ describe("Endpoints", () => {
 
   beforeEach(done => {
     (async () => {
+      await Endpoint.deleteAll()
+
       user = await User.first()
 
       const endpoint = new Endpoint({
@@ -26,10 +28,6 @@ describe("Endpoints", () => {
       endpoints = [endpoint]
       done()
     })()
-  })
-
-  afterEach(done => {
-    Endpoint.deleteAll().then(done)
   })
 
   it("GET /endpoints", done => {

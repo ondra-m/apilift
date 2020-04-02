@@ -1,4 +1,4 @@
-import { connection, callback } from "../database"
+import { connection } from "../database"
 import { v1 as generateUUID } from "uuid"
 import { Base } from "./base"
 

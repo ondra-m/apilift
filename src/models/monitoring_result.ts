@@ -29,6 +29,7 @@ export class MonitoringResult extends Base<IMonitoringResult, MonitoringResult>(
     return new Promise(resolve => {
       connection.query("INSERT INTO ?? (endpointId, checkedAt, httpCode, payload, userId) VALUES(?, ?, ?, ?, ?)", [this.tableName, this.attrs.endpointId, this.attrs.checkedAt, this.attrs.httpCode, this.attrs.payload, this.attrs.userId], (error, results) => {
         if (error) { throw error }
+        if (results.insertId) { this.attrs.id = results.insertId }
 
         resolve(true)
       })
