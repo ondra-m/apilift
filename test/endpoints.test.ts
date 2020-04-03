@@ -71,24 +71,45 @@ describe("Endpoints", () => {
     })
   })
 
-  it("POST /endpoints", done => {
-    supertest(server)
-      .post("/endpoints")
-      .set("Authorization", `Bearer ${user?.attrs?.accessToken}`)
-      .set("Accept", "application/json")
-      .send({
-        "interval": 10,
-        "name": "testtesttest",
-        "url": "http://seznam.cz",
-      })
-      .expect(201)
-      .end((err: any, response: supertest.Response) => {
-        Endpoint.count()
-          .then(count => {
-            expect(count).to.eq(2)
-            done()
-          })
-      })
+  describe("POST /endpoints", () => {
+    it("should pass", done => {
+      supertest(server)
+        .post("/endpoints")
+        .set("Authorization", `Bearer ${user?.attrs?.accessToken}`)
+        .set("Accept", "application/json")
+        .send({
+          "interval": 10,
+          "name": "testtesttest",
+          "url": "http://seznam.cz",
+        })
+        .expect(201)
+        .end((err: any, response: supertest.Response) => {
+          Endpoint.count()
+            .then(count => {
+              expect(count).to.eq(2)
+              done()
+            })
+        })
+    })
+
+    it("validation errors", done => {
+      supertest(server)
+        .post("/endpoints")
+        .set("Authorization", `Bearer ${user?.attrs?.accessToken}`)
+        .set("Accept", "application/json")
+        .send({
+          "interval": "big",
+          "name": "",
+          "url": "applifting",
+        })
+        .expect(422)
+        .end((err: any, response: supertest.Response) => {
+          const attributes = response.body.map((item: { attribute: string }) => item.attribute)
+
+          expect(attributes).to.eql(["name", "url", "interval"])
+          done()
+        })
+    })
   })
 
   it("PATCH /endpoints", done => {

@@ -2,17 +2,15 @@ import path from "path"
 import { readFileSync } from "fs"
 import mysql from "mysql"
 import * as seed from "./migrate/seed"
+import { config } from "./config"
 
-export const connection = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "apilift",
-})
+export let connection: mysql.Pool
 
 async function createTableIfNotExists(tableName: string): Promise<boolean> {
   return new Promise(resolve => {
     connection.query("SHOW TABLES LIKE ?", [tableName], (error, results, fields) => {
+      if (error) { throw error }
+
       if (results.length) {
         resolve(true)
       }
@@ -46,6 +44,8 @@ async function seedIfNoRecords(tableName: string, seedFunc: Function) {
 }
 
 export async function start() {
+  connection = mysql.createPool(config.database)
+
   await createTableIfNotExists("users")
   await createTableIfNotExists("endpoints")
   await createTableIfNotExists("monitoringResults")

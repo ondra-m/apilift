@@ -19,9 +19,14 @@ export class MonitoringResultsController extends BaseController {
 
   index(req: Request, res: Response, next: Next) {
     const user: User = req.get("user")
+    const condition: any = { userId: user.id }
+
+    if (req.params.endpointId) {
+      condition.endpointId = req.params.endpointId
+    }
 
     MonitoringResult
-      .where({ userId: user.id }, [["checkedAt", "DESC"]], 10)
+      .where(condition, [["checkedAt", "DESC"]], 10)
       .then(results => {
         res.json(results.map(result => result.toApi()))
         next()

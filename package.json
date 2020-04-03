@@ -5,9 +5,11 @@
   "main": "build/index.js",
   "scripts": {
     "start:dev": "nodemon",
-    "start": "npm run copy-sqls && ts-node ./src/index.ts",
-    "copy-sqls": "cp -r src/migrate/*.sql build/migrate/",
-    "test:dev": "nodemon --watch . --ext ts --exec 'mocha --file test/bootstrap.ts -r ts-node/register test/**/*.test.ts'"
+    "start": "npm run copy-sqls && npx ts-node ./src/index.ts",
+    "copy-sqls": "mkdir -p build/migrate && cp -r src/migrate/*.sql build/migrate/",
+    "test:dev": "nodemon --watch . --ext ts --exec 'npm run test'",
+    "test": "mocha --file test/bootstrap.ts -r ts-node/register test/**/*.test.ts",
+    "build": "npx tsc && npm run copy-sqls"
   },
   "author": "",
   "license": "MIT",

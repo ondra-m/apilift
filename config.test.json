@@ -1,0 +1,11 @@
+{
+  "database": {
+    "host": "localhost",
+    "user": "root",
+    "password": "root",
+    "database": "apilift_test"
+  },
+  "webserver": {
+    "port": 4000
+  }
+}

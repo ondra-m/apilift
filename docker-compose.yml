@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: apilift
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
+  app:
+    build: .
+    container_name: "app"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    environment:
+      APILIFT_DB_HOST: mysql
+      APILIFT_DB_USER: mysql
+      APILIFT_DB_PASSWORD: password
+      APILIFT_DB_NAME: apilift
+      APILIFT_WEB_PORT: 3000
+    restart: always
+    command: node build/index.js
+
+volumes:
+  db_data:

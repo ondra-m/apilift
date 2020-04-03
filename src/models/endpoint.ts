@@ -44,7 +44,7 @@ export class Endpoint extends Base<IEndpoint, Endpoint>() {
   validate() {
     const errors: Array<Error> = []
 
-    if (!this.attrs.name || !validator.isLength(this.attrs.name, { max: 100 })) {
+    if (!this.attrs.name || !validator.isLength(this.attrs.name, { min: 1, max: 100 })) {
       errors.push({ attribute: "name", messages: "Name is required" })
     }
 
